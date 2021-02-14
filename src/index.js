@@ -6,10 +6,12 @@ import Book from './Book.js'
 
 
 const BookList = () =>  {
+
+
+
     return (
         <section className="BookList">
             {books.map((book) => {
-                console.log(book);
                 return (
                     <Book key = {book.id} {...book}></Book>
                 )
