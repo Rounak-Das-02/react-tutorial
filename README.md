@@ -1,70 +1,231 @@
-# Getting Started with Create React App
+# React Basics
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Some Basic NPM commands
+___
+1. `npm init` - creates package.json (manifest)file , list dependencies
 
-## Available Scripts
+2. `npm install <package name> --save` - Install package locally and add to package.json
 
-In the project directory, you can run:
+3. `npm intall <package name> -g` - installs package globally (access anywhere) SUDO command
 
-### `npm start`
+4. `npm install <package name> --save-dev` - Use it only in development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
+___
+To start with React app , you have to type and enter in the command line`npx create-react-app <project name>`.<br>
+You may go to the repo of React in github to check other stuffs out.<br>
+The above command will create all dependencies and other files required to get started with basic React app.<br>
+[Note : as a matter of fact , you may yourself create all the files and build React framework , but it's a lot of work]
+<br>
 
-### `npm test`
+### Cleaning the boiler plate
+___
+Before starting with React app , let us clean the boiler plate. [Note : we are starting from scratch]
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Delete everything in src folder and create one index.js
 
-### `npm run build`
+Next we create index.js inside src
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then we need to import few modules.
+`import React from 'react'`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Creating component
+___
+A component in React is basically a function. And the way to create a React component is just capitalizing the first letter of the function name.
+Eg : `function Myfunc() { return <something>}`
+or 
+`const Myfunc = () => {return <something>}`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Now to be specific , we return some HTML to be rendered on to the screen. Technically they are not called HTML but JSX(Javascript XML).
 
-### `npm run eject`
+So now , we can write something like : 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+function Myfunc()
+{ 
+    return (
+    <div>
+    <h1> HELLO</h1>
+    <h2>World</h2>
+    </div>
+            );
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Now you have to render it into the screen , the way to do that is : 
+`ReactDom.render(<Myfunc/> , document.getElementById('root'));`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+And also , don't forget to add the import : `import ReactDom from 'react-dom`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Next just type in the command line , `npm start`. It should open localhost in your default browser. By default it opens in port 3000. If it doesn't open by default , just go to localhost:3000 in your browser. CONGO! you have your thing running 
 
-## Learn More
+### Nested Component
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Since we can only render one component a single page with ReactDom, it is necessary to have nested components.
+The following example will clear everything.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+function Myfunc()
+{ 
+    return (
+        <hello></hello>
+            );
+}
 
-### Code Splitting
+const hello = () => {
+    return <h1>Hello</h1>
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+ReactDom.render(<Myfunc/> , document.getElementById('root'));
 
-### Analyzing the Bundle Size
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This will render hello inside Myfunc
 
-### Making a Progressive Web App
+### Basic CSS
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Create a index.css inside src folder.
+Inside the css folder , just type in whatever styling you want to do using the class name or id of the components. Let's see how to name the component. It is as easy as writing : 
+```
+function Myfunc()
+{ 
+    return (
+    <div className = "myname">
+    <h1> HELLO</h1>
+    <h2>World</h2>
+    </div>
+            );
+}
+```
 
-### Advanced Configuration
+Note the camelCase. Afterall this is JSX, and not plain HTML.
+Also , add `import ./index.css`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+if you want to add styling inside the tags , then :
 
-### Deployment
+```
+function Myfunc()
+{ 
+    return (
+    <div className = "myname" style = {{color : 'red' , fontSize : '24px'}}>
+    <h1> HELLO</h1>
+    <h2>World</h2>
+    </div>
+            );
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Whenever we use {} it means , we are now in js environment and everything inside {} will be treated as Javascript element.
+Now , the only reason for {{}} is because we create an object inside. A bit confusing , but it is what it is . :laughing:
 
-### `npm run build` fails to minify
+I personally prefer using CSS rather than using JSX CSS.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Props
+
+Props are a great way to make Components highly dynamic. Suppose you have a component named BookList which renders Book, then they will all have different properties like Author , image , Title , Description , etc.
+
+There are multiple ways of using props. Let's see some of them. The examples are self explanatory.
+
+```
+const book = {
+    title : "Title",
+    des : "description"
+}
+
+function BookList()
+{
+    return (<section>
+        <Book title = {book.title} , des = {book.des}></Book>
+            </section>)
+}
+
+function Book(props)
+{
+    return (
+        <div>
+            {props.title}
+            {props.des}
+        </div>
+    )
+}
+```
+
+Now you can also use `<Book {...book}}></Book>`. This will pass the book as object.
+You can also use `function Book({title , des})`. This is not JSX specific but plain Javascript.
+
+Next , let us go and have a list of object : 
+```
+const books = [
+    {
+        id : 1 , 
+        title : "Unfinished: A memoir",
+        author : "Priyanka Chopra Jonas",
+    },
+    {
+        id : 2 , 
+        title : "The Alchemist",
+        author : "Paulo Coelho",
+    },
+
+    {
+        id : 3 , 
+        title : "Think Like a Monk",
+        author : "jay Shetty",
+    }
+]
+```
+We have to use map method to wrap them as usual by using map.
+
+just use 
+```
+function Myfunc()
+{ 
+    return (
+    <div className = "myname">
+        {books.map((book) => {
+            return <Book {...book}></Book>
+        )})}
+    </div>
+            );
+}
+```
+
+### Event Basics
+Since we know that we use camelCase in JSX , let us see one basic example of event
+
+```
+const clickHandler = (text) => {
+    console.log(text);
+}
+
+function Myfunc()
+{
+    return <div className = "clicker" onClick = {() => clickHandler("Hello")}></div>   
+}
+```
+
+Check what happens when you only use `{clickHandler("Hello)}` instead of {() => `clickHandler("Hello")}`
+___
+## Hooks
+___
+### UseState
+UseState is used to initialise a variable which might change.
+
+Let's check it out 
+
+```
+import useState from 'react'
+
+const [count , countfunc] = useState(0);
+
+
+function Myfunc()
+{
+    return <div className = "clicker" onClick = {() => countfunc(count+1)}>{count}</div>   
+}
+
+```
+This is going to increment the value of count by 1 each time the div is clicked.
+
+You can use arrays as well in useState. Remember to use filter function to change values in object with respect to key in objects.
