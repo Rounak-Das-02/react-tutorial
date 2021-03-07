@@ -229,3 +229,35 @@ function Myfunc()
 This is going to increment the value of count by 1 each time the div is clicked.
 
 You can use arrays as well in useState. Remember to use filter function to change values in object with respect to key in objects.
+
+
+##### Functional Update Form
+Since now we know how to increase a counter Value , let's dive into something bit complicated.
+Let's say we want to create a setTimeout(). Since this is an asynchronous function, even after clicking the update function 5-6 times at once, counter will increase by 1. [This is for you to figure it out... Use your brains]. Well, if you want to increase the counter 5-6 times at once after somgiven amount of time specified in setTimeout(), then use something like this : 
+`setTimeout(()=>{setValue((preValue)=> {return (preValue+1)})} , 2000);`
+What this does is, it takes the previous value of the counter and updates it in the stack unlike waiting for it.
+To understand this better, just write some simple counter with setTimeout and understand the difference between `setTimeout(()=>{setValue((preValue)=> {return (preValue+1)})} , 2000);` and `setTimeout(()=>{setValue(value+1)} , 2000);`
+
+### UseEffect
+Another cool Hook is UseEffect. By default it runs after every re-render. Since useState renders a component again and again, useEffect is called at the same time as well. So basic syntax of useEffect is :
+`useEffect(()=>{//callback function},[//dependency list]`
+Now the dependency list contains the values which should trigger the useEffect after initial render. For example, if I want useEffect() to be rendered when my variable `value` changes, then I would put `value` in the dependency list.
+`useEffect(()=>{//callback function},[value]`
+
+##### CleanUp
+Suppose we add a Eventlistener to our window , re-rendering will cause to create multiple EventListener. It might consume a lot of memory and cause our website to be buggy and laggy. So, it is recommended to set up a cleanp function. and the way to do it is :
+```
+useEffect(()=>{
+    //Do your stuffs here
+    //In this case window.addEventListener('resize' , checkSize)
+
+    return ()=>{
+        //This s the cleanup function
+        //In this case , window.removeEventListener('resize' , checkSize)
+    }
+})
+```
+##### Fetch Data
+One of our Objectives is to fetch data from APIs and so forth. This is easy , use some external libs or use inbuilt fetch function. Beware not to set up an infinite loop with useEffect(). Learn about promises and responses in js if you don't know how to fetch or so ...
+
+
