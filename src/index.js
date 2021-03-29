@@ -1,47 +1,27 @@
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
 import ReactDOM from 'react-dom';
-import {books} from './books.js'
-import Book from './Book.js'
+import {BrowserRouter as Router , Route , Switch} from 'react-router-dom';
+
+import Home from './Home.js';
+import Book from './Book.js';
+import Error from './error.js';
 
 
 
-const BookList = () =>  {
-
-const [value , setValue] = useState(window.innerWidth);
-const checkSize = () => setValue(window.innerWidth);
-
-useEffect(()=>{
-            window.addEventListener('resize' , checkSize)
-},[value]);
-console.log("Render Component");
-
-
-
-    return(
+const ReactRouterSetup = () =>{
+    return (<Router>
         <div>
-            <h1>Window : {value}px</h1>
-            <span>
-                <button onClick={()=>{setValue(value+1)}}>Update</button>
-                <button onClick={()=>{setValue(0)}}>Reset</button>
-            </span>
-            </div>
-    );
+            <ul>
+                <a href = '/'>Home</a>
+                <a href = '/Book'>Book</a>
+            </ul>
+        </div>
+        <Switch>
+            <Route exact path = '/'><Home></Home></Route>
+            <Route path = '/Book'><Book></Book></Route>
+            <Route path ='*'><Error></Error></Route>
+        </Switch>
+    </Router>)
+}
 
-
-
-
-
-
-    // return (
-    //     <section className="BookList">
-    //         {books.map((book) => {
-    //             return (
-    //                 <Book key = {book.id} {...book}></Book>
-    //             )
-    //         })}
-    //     </section>
-    // )
-} 
-
-ReactDOM.render(<BookList/> , document.getElementById('root'));
+ReactDOM.render(<ReactRouterSetup/> , document.getElementById('root'));

@@ -1,8 +1,8 @@
 import React , {useState} from 'react';
 
 
-
-import './beauty.css'
+import {books} from './books.js';
+import './beauty.css';
 
 
 const Book = (props) =>{
