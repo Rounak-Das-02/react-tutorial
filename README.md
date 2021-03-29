@@ -233,7 +233,7 @@ You can use arrays as well in useState. Remember to use filter function to chang
 
 ##### Functional Update Form
 Since now we know how to increase a counter Value , let's dive into something bit complicated.
-Let's say we want to create a setTimeout(). Since this is an asynchronous function, even after clicking the update function 5-6 times at once, counter will increase by 1. [This is for you to figure it out... Use your brains]. Well, if you want to increase the counter 5-6 times at once after somgiven amount of time specified in setTimeout(), then use something like this : 
+Let's say we want to create a setTimeout(). Since this is an asynchronous function, even after clicking the update function 5-6 times at once, counter will increase by 1. [This is for you to figure it out... Use your brains]. Well, if you want to increase the counter 5-6 times at once after some given amount of time specified in setTimeout(), then use something like this : 
 `setTimeout(()=>{setValue((preValue)=> {return (preValue+1)})} , 2000);`
 What this does is, it takes the previous value of the counter and updates it in the stack unlike waiting for it.
 To understand this better, just write some simple counter with setTimeout and understand the difference between `setTimeout(()=>{setValue((preValue)=> {return (preValue+1)})} , 2000);` and `setTimeout(()=>{setValue(value+1)} , 2000);`
@@ -252,12 +252,220 @@ useEffect(()=>{
     //In this case window.addEventListener('resize' , checkSize)
 
     return ()=>{
-        //This s the cleanup function
+        //This is the cleanup function
         //In this case , window.removeEventListener('resize' , checkSize)
     }
 })
 ```
 ##### Fetch Data
 One of our Objectives is to fetch data from APIs and so forth. This is easy , use some external libs or use inbuilt fetch function. Beware not to set up an infinite loop with useEffect(). Learn about promises and responses in js if you don't know how to fetch or so ...
+
+Just in case you need an example, 
+
+```
+const [url , setUrl] = useState("Type the url here") //For example : https://api.github.com/users
+fetch(url)
+.then((res) => res.json())
+.then((user) => setUsers(user))
+```
+
+##### Show/Hide Component
+With React, we can even hide or show components whenever necessary. This doesn't require much explanation, let's dive into the example which is self explanatory. 
+
+```
+const [show , setShow] = useState(false);
+const Item = () =>{
+    return <div>
+        HELLO BONDHUGON.
+    </div>
+}
+
+return(
+    <button onClick = {()=>{setShow(!show)}}>SHOW/HIDE</button>
+    {show && <Item/>}
+)
+
+```
+
+In this example we are basically toggling between the values of show (true and false) which helps in determining whether Item should be rendered or not using the && operator.
+
+
+##### Forms in React
+Forms in React are implemented a bit differently than in original Javascript.
+
+So let us first create a form and make a function for handling events when user clicks on Submit Button
+
+```
+const handleSubmit = (e) =>{
+        e.preventDefault();
+        console.log("Hi");
+    };
+
+
+    return(
+        <div style = {{color : 'gray' , padding : '2rem'}}>
+
+            <form className = 'form'>
+                <div className = 'form-control'>
+                    <label htmlFor='firstName'>Name : </label>
+                    <input type = 'text' id = 'firstName' name = 'firstName'></input>
+                </div>
+
+                <div className = 'form-control'>
+                    <label htmlFor='email'>Email : </label>
+                    <input type = 'email' id = 'email' name = 'email'></input>
+                </div>
+
+                <button onClick = {handleSubmit}>Submit</button>
+
+            </form>
+```
+
+So we see that handleSubmit function has an event object e and we call e.preventDefault(). This is because by default javascript refreshes the page when we click on submit button and hence the statements under handleSubmit does not get executed. 
+
+Also, instead of `onClick` in button we can use onSubmit in form tag like this ```<form className = 'form' onSubmit = {handleSubmit}>```
+
+Now, we need to access the values inputted by the user. In order to do that, we have to use useState
+Now we need two more things. value inside input tag to store the value inputted by the user and also an onChange which would trigger and change the variable in useState. Confusing enough? ... Let's dive into example. [Note : I am doing this for multiple inputs for easier workflow]
+
+```
+    const [person , setPerson] = useState({firstName : '' , email : ''})
+    const [users , setUsers] = useState([]);
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setPerson({...person , [name]:value})
+    };
+
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        if(person.firstName && person.email)
+        {
+            setUsers([...users , person]);
+            setPerson({firstName:'' , email:''});
+        }
+    };
+
+
+    return(
+        <div style = {{color : 'gray' , padding : '2rem'}}>
+
+            <form className = 'form' onSubmit = {handleSubmit}>
+                <div className = 'form-control'>
+                    <label htmlFor='firstName'>Name : </label>
+                    <input 
+                    type = 'text' 
+                    id = 'firstName' 
+                    name = 'firstName'
+                    value ={person.firstName}
+                    onChange = {handleChange}
+                    ></input>
+                </div>
+
+                <div className = 'form-control'>
+                    <label htmlFor='email'>Email : </label>
+                    <input type = 'email' id = 'email' name = 'email'
+                    value = {person.email}
+                    onChange = {handleChange}
+                    ></input>
+                </div>
+
+                <button>Submit</button>
+
+            </form>
+
+
+        {
+            users.map((person , key) =>{
+                return (
+                    <span key>
+                        <h1 style = {{color : 'green'}}>{person.firstName}</h1>
+                        <h1>{person.email}</h1>
+                    </span>
+                )
+            })
+        }
+        </div>
+
+    );
+
+```
+
+OMG!! a long example...erghh ..Let's go through step by step
+`const [person , setPerson] = useState({firstName : '' , email : ''})` -> This stores the value inputted by the user. I store them as array because I don't want to use two useState separately.
+
+`const [users , setUsers] = useState([]);` -> We store all the values in this list. Like if the user inputs 100 userNames and emails, they get stored in users list.
+
+Then we set up the form. Now to get the input value in placeholder, we do `value = {person.email}`. But this is not it. We need another onChange to trigger something whenever the value is changed. Without onChange js might throw error , warning, etc etc and also even if user types anything, he won't see anything on screen. This is because the value is always initialised to ''.
+So, we handle the change in handleChange function, where we actually take in both the values (in this case , firstName and email) and put it inside person. 
+```    
+const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setPerson({...person , [name]:value})
+    };
+```
+The `e` here is the event object with which we reference the target value i.e firstName or email inputted by user. So whenever the user types in the Name in the form, e.taget.name stores 'firstName' and e.target.value stores the value inputted by the user. Same goes for email. Then we put both of them into person.
+
+Exactly same thing goes on with handleSubmit where if firstName and email are not empty, then we append the values!.
+
+To put it in short, I use this form format whenever I require to use form. Feel free to explore the other tricks related to forms in React.
+
+##### React-Router
+Finally, let us look into router where we actually navigate from one page to another page!!
+To get started , type in `npm install react-router-dom` in the terminal.
+
+Next, we import `import {BrowserRouter as Router , Route , Switch} from 'react-router-dom';`
+
+Now we have few pre-requisites. If you are already reading this, then you must know about export and creating new files and components.
+
+Suppose you need to have 3 pages. You have 3 components named Home, About Us and Contact in separate files. Now in the index.js file simple type in the following : 
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouter as Router , Route , Switch} from 'react-router-dom';
+
+import Home from './Home.js';
+import About from './AboutUs.js';
+import Contact from './Contact.js';
+import Error from './error.js';
+
+
+
+const ReactRouterSetup = () =>{
+    return (<Router>
+        <div>
+            <ul>
+                <a href = '/'>Home</a>
+                <a href = '/About'>About Us</a>
+                <a href = '/Contact'>Contact</a>
+            </ul>
+        </div>
+        <Switch>
+            <Route exact path = '/'><Home></Home></Route>
+            <Route path = '/Book'><Book></Book></Route>
+            <Route path ='*'><Error></Error></Route>
+        </Switch>
+    </Router>)
+}
+
+ReactDOM.render(<ReactRouterSetup/> , document.getElementById('root'));
+```
+
+Here, <Router> tag contains the components to be routed. So we also create a Navbar which is plain javascript :) 
+The <Route> tag contains the component to be routed.
+The <Switch> tag ensures the sequential matching of the routes. It means that the '*' will only be triggered if none of the paths are matched.
+Inside the <Route> we use exact so that only that component is rendered not the others. Without exact, upon clicking the Routes, it would render all the pages as a single webpage.
+
+
+Thank you for reading !! :)
+
+This is just a README file for quick reference. Will add more to this someday ... Till then, Sayonara..
+
+
+
 
 
